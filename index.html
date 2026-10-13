@@ -30,6 +30,7 @@
   --accent-ink: #FFFFFF;
   --hit: #FFD84D;
   --hit-ink: #1B2227;
+  --ok: #2E7D4F;
   --danger: #B3392F;
   --c1: #C9D9E8; --c2: #E6D8B8; --c3: #CFE0CF; --c4: #E3CCD2; --c5: #D3CDE6; --c6: #E5CDBB;
   --cover-ink: #27323A;
@@ -42,7 +43,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #121619; --surface: #1A2024; --ink: #E4E9E7; --muted: #8C98A0; --line: #2A3236;
-    --accent: #7CB0EE; --accent-ink: #0E1A28; --hit: #D9B93C; --hit-ink: #14181B; --danger: #E5776D;
+    --accent: #7CB0EE; --accent-ink: #0E1A28; --hit: #D9B93C; --hit-ink: #14181B; --danger: #E5776D; --ok: #6CC48C;
     --c1: #2A3B4C; --c2: #4A4128; --c3: #2D4232; --c4: #4A2F38; --c5: #3A3552; --c6: #4B3A2D;
     --cover-ink: #E4E9E7;
     color-scheme: dark;
@@ -50,7 +51,7 @@
 }
 :root[data-theme="dark"] {
   --bg: #121619; --surface: #1A2024; --ink: #E4E9E7; --muted: #8C98A0; --line: #2A3236;
-  --accent: #7CB0EE; --accent-ink: #0E1A28; --hit: #D9B93C; --hit-ink: #14181B; --danger: #E5776D;
+  --accent: #7CB0EE; --accent-ink: #0E1A28; --hit: #D9B93C; --hit-ink: #14181B; --danger: #E5776D; --ok: #6CC48C;
   --c1: #2A3B4C; --c2: #4A4128; --c3: #2D4232; --c4: #4A2F38; --c5: #3A3552; --c6: #4B3A2D;
   --cover-ink: #E4E9E7;
   color-scheme: dark;
@@ -123,11 +124,50 @@ html.lock #reader { height: 100%; min-height: 0; }
 .rtitle b { font-size: 14px; font-weight: 600; }
 .rtitle span { font-size: 12px; color: var(--muted); }
 .aa { font: 600 17px var(--serif); }
-.autobar { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--accent); }
 .vp { flex: 1; min-height: 0; position: relative; overflow: hidden; width: 100%; max-width: 720px; margin-inline: auto; }
 .text { font-family: var(--read); font-size: var(--fs); line-height: var(--lh); hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
 .text h2 { font: italic 600 .9em/1.35 var(--serif); color: var(--muted); margin-bottom: 1em; break-after: avoid-column; }
 .text p { margin: 0 0 .8em; orphans: 2; widows: 2; }
+.text { -webkit-user-select: text; user-select: text; }
+::highlight(saved) { background-color: color-mix(in srgb, var(--accent) 20%, transparent); text-decoration: underline; text-decoration-color: var(--accent); }
+::highlight(say) { background-color: color-mix(in srgb, var(--hit) 38%, transparent); }
+::highlight(sayword) { background-color: var(--hit); color: var(--hit-ink); }
+::highlight(hit) { background-color: var(--hit); color: var(--hit-ink); }
+.btn.big { height: 52px; font-size: 17px; width: 100%; }
+.rvstats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.rvtile { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 12px 6px; text-align: center; }
+.rvtile b { display: block; font: 600 26px var(--ui); color: var(--accent); font-variant-numeric: tabular-nums; }
+.rvtile span { font-size: 12px; color: var(--muted); }
+.rvtop { display: flex; align-items: center; gap: 12px; }
+.rvtop .btn { height: 36px; padding: 0 12px; }
+.rvprog { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.rvprog i { display: block; height: 100%; background: var(--accent); }
+.rvcount { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rvcard { border: 1px solid var(--line); background: var(--surface); border-radius: 18px; padding: 22px 18px; display: flex; flex-direction: column; gap: 14px; }
+.rvlabel { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.rvq { font: 600 28px/1.25 var(--serif); overflow-wrap: anywhere; }
+.rvq.long { font-size: 20px; line-height: 1.4; }
+.rvctx { font: 17px/1.55 var(--serif); color: var(--muted); }
+.rvctx b { color: var(--ink); }
+.rvblank { border-bottom: 2px solid var(--accent); padding: 0 16px; }
+.rvans { font: 600 24px/1.3 var(--ui); color: var(--accent); overflow-wrap: anywhere; }
+.rvans.long { font-size: 18px; font-weight: 500; color: var(--ink); }
+.rvopts { display: flex; flex-direction: column; gap: 8px; }
+.rvopt { min-height: 50px; text-align: left; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); font-size: 17px; line-height: 1.35; overflow-wrap: anywhere; }
+.rvopt.ok { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, transparent); }
+.rvopt.bad { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, transparent); }
+.rvgrades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.rvg { height: auto; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 6px 2px; }
+.rvg small { font-size: 11px; color: var(--muted); }
+.rvfb { font-weight: 600; }
+.rvfb.ok { color: var(--ok); }
+.rvfb.bad { color: var(--danger); }
+.rvin { width: 100%; min-height: 50px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: 18px var(--ui); padding: 0 14px; }
+.rvrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(132px + env(safe-area-inset-bottom, 0px)); z-index: 12; box-shadow: 0 6px 24px rgba(0,0,0,.25); padding: 0 20px; }
+.pext { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.pext .btn { min-height: 40px; padding: 0 14px; }
+select { width: 100%; min-height: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 16px var(--ui); padding: 0 10px; }
 .text mark.hit { background: var(--hit); color: var(--hit-ink); border-radius: 3px; padding: 0 1px; }
 .text ::selection { background: color-mix(in srgb, var(--hit) 70%, transparent); color: inherit; }
 .mode-pages .text { height: var(--H); width: var(--W); padding: 20px var(--p) 14px; column-width: calc(var(--W) - 2 * var(--p)); column-gap: calc(2 * var(--p)); column-fill: auto; }
@@ -179,7 +219,7 @@ html.lock #reader { height: 100%; min-height: 0; }
 #settings .hint { margin-top: 4px; }
 #toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(118px + env(safe-area-inset-bottom, 0px)); z-index: 20; max-width: calc(100% - 32px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; line-height: 1.4; text-align: center; }
 @keyframes pulse { 50% { opacity: .45; } }
-@media (prefers-reduced-motion: reduce) { .ploading { animation: none; } .autobar { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { .ploading { animation: none; } }
 </style>
 </head>
 <body>
@@ -209,13 +249,24 @@ html.lock #reader { height: 100%; min-height: 0; }
   <div id="wlist"></div>
 </main>
 
+<main id="review" class="screen" hidden>
+  <h1 class="h1">Review</h1>
+  <div id="rvHome">
+    <div class="rvstats" id="rvStats"></div>
+    <p class="hint" id="rvNext"></p>
+    <button class="btn primary big" id="rvStart">Start review</button>
+    <button class="btn big" id="rvMore" style="margin-top:10px">Practice 10 random words</button>
+    <p class="hint">Every saved word and phrase comes back on a schedule: new ones tomorrow, then after 3 days, a week, a month, and so on, as long as you remember them. Exercises are made from your own words and the sentences you found them in, and get harder as a word sticks: flashcard, then multiple choice, then fill in the blank, then typing.</p>
+  </div>
+  <div id="rvRun" hidden></div>
+</main>
+
 <section id="reader" hidden>
   <header class="rtop" id="rtop">
     <button class="iconbtn" id="backBtn" aria-label="Back to library"></button>
     <div class="rtitle"><b id="rBook"></b><span id="rSec"></span></div>
     <button class="iconbtn" id="tocBtn" aria-label="Contents"></button>
     <button class="iconbtn" id="setBtn" aria-label="Reading settings"><span class="aa">Aa</span></button>
-    <i class="autobar" id="autobar"></i>
   </header>
   <div class="vp" id="vp"><div class="text" id="text" lang="en"></div></div>
   <footer class="rbot" id="rbot">
@@ -223,14 +274,15 @@ html.lock #reader { height: 100%; min-height: 0; }
     <div class="bar"><i id="barfill"></i></div>
     <div class="ctl">
       <button class="iconbtn" id="prevBtn" aria-label="Previous page"></button>
-      <div class="spd"><button id="slower" aria-label="Slower">&minus;</button><span id="wpmLbl"></span><button id="faster" aria-label="Faster">+</button></div>
-      <button class="btn auto" id="autoBtn" aria-pressed="false"></button>
+      <div class="spd"><button id="slower" aria-label="Slower voice">&minus;</button><span id="rateLbl"></span><button id="faster" aria-label="Faster voice">+</button></div>
+      <button class="btn auto" id="listenBtn" aria-pressed="false"></button>
       <button class="iconbtn" id="nextBtn" aria-label="Next page"></button>
     </div>
   </footer>
 
   <div class="sheet bottom" id="panel" hidden role="dialog" aria-label="Translation">
     <div class="phead"><div class="psrc" id="pSrc"></div><button class="iconbtn" id="pClose" aria-label="Close"></button></div>
+    <div class="pext"><button class="btn" id="pPrev">&larr; word</button><button class="btn" id="pNext">word &rarr;</button><button class="btn" id="pWhole">Whole sentence</button></div>
     <div id="pLoad" class="ploading">Translating…</div>
     <div id="pBody" hidden>
       <div class="pru" id="pRu" lang="ru"></div>
@@ -240,8 +292,10 @@ html.lock #reader { height: 100%; min-height: 0; }
       <p class="pline pnote" id="pSentRu" lang="ru" hidden></p>
     </div>
     <div id="pErr" class="perr" hidden></div>
-    <div class="pbtns"><button class="btn primary" id="pSave" disabled>Save word</button><button class="btn" id="pSent" hidden>Translate sentence</button><button class="btn" id="pRetry" hidden>Try again</button></div>
+    <div class="pbtns"><button class="btn primary" id="pSave" disabled>Save word</button><button class="btn" id="pListen">Listen from here</button><button class="btn" id="pSent" hidden>Translate sentence</button><button class="btn" id="pRetry" hidden>Try again</button></div>
   </div>
+
+  <button class="btn primary pill" id="selPill" hidden>Translate selection</button>
 
   <div class="sheet bottom" id="toc" hidden role="dialog" aria-label="Contents">
     <div class="phead"><div class="psrc">Contents</div><button class="iconbtn" id="tocClose" aria-label="Close"></button></div>
@@ -252,8 +306,10 @@ html.lock #reader { height: 100%; min-height: 0; }
     <div class="srow"><span>Text size</span><div class="step"><button id="fsDown" aria-label="Smaller text">A&minus;</button><span id="fsVal"></span><button id="fsUp" aria-label="Larger text">A+</button></div></div>
     <div class="srow"><span>Typeface</span><div class="seg" id="fontSeg"><button data-v="serif">Serif</button><button data-v="sans">Sans</button></div></div>
     <div class="srow"><span>Layout</span><div class="seg" id="modeSeg"><button data-v="pages">Pages</button><button data-v="scroll">Scroll</button></div></div>
-    <div class="srow col"><label for="wpm">Auto-turn speed<b id="wpmVal"></b></label><input type="range" id="wpm" min="80" max="300" step="5"></div>
-    <p class="hint">Auto-turn moves the page or scroll at this many words a minute while your phone reads aloud. Set it to match your Speak Screen voice speed.</p>
+    <div class="srow col"><label for="voiceSel">Reading voice</label><select id="voiceSel"></select></div>
+    <div class="srow col"><label for="rate">Reading speed<b id="rateVal"></b></label><input type="range" id="rate" min="0.6" max="1.6" step="0.05"></div>
+    <button class="btn" id="voiceTest">Play a sample</button>
+    <p class="hint" id="voiceHint">The voices come from your phone. For a more natural one, open Settings, Accessibility, Spoken Content, Voices, English, download an Enhanced or Premium voice, then reload this app. Apple does not always share its Siri voices with web apps. Highlighting while reading needs iOS 17.2 or newer.</p>
     <button class="btn primary" id="setDone">Done</button>
   </div>
 </section>
@@ -261,6 +317,7 @@ html.lock #reader { height: 100%; min-height: 0; }
 <nav class="tabs" id="tabs" aria-label="Sections">
   <button id="tabBooks" aria-selected="true"></button>
   <button id="tabWords" aria-selected="false"></button>
+  <button id="tabReview" aria-selected="false"></button>
 </nav>
 
 <script>
@@ -291,7 +348,8 @@ const IC = {
   play: SVG('<path d="M8 5l11 7-11 7z" fill="currentColor"/>'),
   pause: SVG('<path d="M8 5v14M16 5v14"/>'),
   book: SVG('<path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/>'),
-  list: SVG('<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>')
+  list: SVG('<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>'),
+  cards: SVG('<rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v11"/>')
 };
 const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* storage blocked */ } };
@@ -314,10 +372,11 @@ const dbPromise = cap('db');
 
 /* ---------- settings ---------- */
 const SKEY = 'marginalia.settings.v1';
-const S = { fs: 19, font: 'serif', mode: 'pages', wpm: 150 };
+const S = { fs: 19, font: 'serif', mode: 'pages', rate: 1, voice: '' };
 try { Object.assign(S, JSON.parse(lsGet(SKEY) || '{}')); } catch (e) { /* defaults */ }
 S.fs = clamp(Number(S.fs) || 19, 14, 28);
-S.wpm = clamp(Number(S.wpm) || 150, 80, 300);
+S.rate = clamp(Number(S.rate) || 1, 0.6, 1.6);
+if (typeof S.voice !== 'string') S.voice = '';
 if (S.mode !== 'scroll') S.mode = 'pages';
 if (S.font !== 'sans') S.font = 'serif';
 const saveS = () => lsSet(SKEY, JSON.stringify(S));
@@ -698,6 +757,13 @@ const Words = {
     this.list = [w, ...this.list.filter(x => x.id !== w.id)];
     lsSet(WKEY, JSON.stringify(this.list)); this.emit();
   },
+  async patch(id, f) {
+    const cur = this.list.find(x => x.id === id); if (!cur) return;
+    const next = { ...cur, ...f };
+    this.list = this.list.map(x => x.id === id ? next : x);
+    if (this.mode === 'db') { const { id: _i, ...body } = next; await this.dbh.doc('words/' + id).set(body); return; }
+    lsSet(WKEY, JSON.stringify(this.list)); this.emit();
+  },
   async remove(id) {
     if (this.mode === 'db') { await this.dbh.doc('words/' + id).delete(); return; }
     this.list = this.list.filter(x => x.id !== id);
@@ -778,18 +844,21 @@ async function importFile(file) {
 function showScreen(name) {
   $('#library').hidden = name !== 'library';
   $('#words').hidden = name !== 'words';
+  $('#review').hidden = name !== 'review';
   $('#reader').hidden = name !== 'reader';
   $('#tabs').hidden = name === 'reader';
   $('#tabBooks').setAttribute('aria-selected', name === 'library');
   $('#tabWords').setAttribute('aria-selected', name === 'words');
+  $('#tabReview').setAttribute('aria-selected', name === 'review');
   document.documentElement.classList.toggle('lock', name === 'reader' && S.mode === 'pages');
   if (name !== 'reader') window.scrollTo(0, 0);
   if (name === 'words') renderWords();
+  if (name === 'review') renderReviewHome();
 }
 
 /* ---------- reader ---------- */
 const vp = $('#vp'), textEl = $('#text'), rtop = $('#rtop'), readerEl = $('#reader');
-const R = { book: null, secs: [], before: [], total: 1, s: 0, page: 0, pages: 1, W: 0, H: 0, padTop: 20, padBot: 14, auto: false, timer: 0, raf: 0, lastTs: 0, y: 0, holdUntil: 0, prog: 0, saveT: 0 };
+const R = { book: null, secs: [], before: [], total: 1, s: 0, page: 0, pages: 1, W: 0, H: 0, padTop: 20, padBot: 14, holdUntil: 0, prog: 0, saveT: 0 };
 const nextPart = h('button', { class: 'btn nextpart', text: 'Continue to next part', onclick: () => turn(1) });
 const isPages = () => S.mode === 'pages';
 
@@ -843,6 +912,8 @@ function loadSection(s, at) {
   R.s = clamp(s, 0, R.secs.length - 1);
   const sec = R.secs[R.s];
   closePanel(true);
+  if (T.playing) halt();
+  T.units = []; hlSet('say', [], 1); hlSet('sayword', [], 2);
   textEl.replaceChildren(h('h2', { text: sec.t }));
   const frag = document.createDocumentFragment();
   sec.p.forEach((t, i) => { const p = document.createElement('p'); p.textContent = t; p.dataset.i = String(i); frag.append(p); });
@@ -854,10 +925,12 @@ function loadSection(s, at) {
     if (at === 'end') { if (isPages()) pageTo(R.pages - 1); else window.scrollTo(0, document.documentElement.scrollHeight); }
     else if (at && typeof at === 'object') paraTo(at.para);
     else { if (isPages()) pageTo(0); else window.scrollTo(0, 0); }
-    afterMove(true);
+    afterMove(true, true);
+    buildUnits(); paintSaved();
+    if (wantsListen()) { T.afterPanel = false; startListen(firstVisibleUnit()); }
   });
 }
-function afterMove(userMove) {
+function afterMove(userMove, skipListen) {
   const sec = R.secs[R.s]; if (!sec) return;
   let frac;
   if (isPages()) frac = (R.page + 1) / R.pages;
@@ -867,7 +940,7 @@ function afterMove(userMove) {
   $('#pR').textContent = isPages() ? 'Page ' + (R.page + 1) + '/' + R.pages : '';
   $('#barfill').style.width = (R.prog * 100) + '%';
   clearTimeout(R.saveT); R.saveT = setTimeout(savePos, 700);
-  if (userMove && R.auto && isPages()) scheduleTurn();
+  if (userMove && !skipListen && wantsListen()) { T.afterPanel = false; startListen(firstVisibleUnit()); }
 }
 function savePos() {
   if (!R.book) return;
@@ -878,7 +951,7 @@ function relayout() {
   if (!R.book || $('#reader').hidden || !isPages()) return;
   const p = curPara();
   layoutPages(); measure(); paraTo(p); afterMove(false);
-  if (R.auto && isPages()) scheduleTurn();
+  if (T.playing && T.units[T.i]) followUnit(T.i, true);
 }
 function turn(dir) {
   closePanel(true);
@@ -923,57 +996,59 @@ function openToc() {
   if (cur) $('#toc').scrollTop = Math.max(0, cur.offsetTop - 90);
 }
 function closeBook() {
-  stopAuto(); closePanel(true); $('#settings').hidden = true; $('#toc').hidden = true;
+  stopListen(); T.pausedAt = null; T.afterPanel = false; hlSet('say', [], 1); closePanel(true); $('#settings').hidden = true; $('#toc').hidden = true;
   clearTimeout(R.saveT); savePos();
   R.book = null;
   showScreen('library'); renderLibrary();
 }
 
-/* ---------- auto-turn ---------- */
-const bar = $('#autobar');
-function resetBar() { bar.style.transition = 'none'; bar.style.width = '0'; }
-function startBar(ms) {
-  resetBar(); void bar.offsetWidth;
-  bar.style.transition = `width ${ms}ms linear`; bar.style.width = '100%';
+/* ---------- highlights (CSS Custom Highlight API) ---------- */
+const HL = !!(window.CSS && CSS.highlights && window.Highlight);
+const HLS = {};
+function hlSet(name, ranges, prio) {
+  if (!HL) return;
+  try {
+    if (!HLS[name]) { HLS[name] = new Highlight(); HLS[name].priority = prio; CSS.highlights.set(name, HLS[name]); }
+    HLS[name].clear(); ranges.forEach(r => HLS[name].add(r));
+  } catch (e) { /* ignore */ }
 }
-function lastFill() {
-  const ps = textEl.querySelectorAll('p'); const last = ps[ps.length - 1];
-  if (!last) return 1;
-  const rs = last.getClientRects(); const r = rs[rs.length - 1];
-  if (!r) return 1;
-  const top = vp.getBoundingClientRect().top + R.padTop;
-  return clamp((r.bottom - top) / Math.max(1, R.H - R.padTop - R.padBot), 0.12, 1);
+function rangeIn(node, a, b) { const r = document.createRange(); r.setStart(node, a); r.setEnd(node, b); return r; }
+let savedRe = null;
+function rebuildSaved() {
+  const set = new Set();
+  Words.list.forEach(w => {
+    [w.text, w.lemma].forEach(x => {
+      x = (x || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      if (x.length >= 2 && /[\p{L}\p{N}]/u.test(x)) set.add(x);
+    });
+  });
+  if (!set.size) { savedRe = null; return; }
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&').replace(/['’]/g, "['’]").replace(/ /g, '\\s+');
+  const alts = [...set].sort((x, y) => y.length - x.length).map(esc).join('|');
+  try { savedRe = new RegExp('(?<![\\p{L}\\p{N}])(?:' + alts + ')(?![\\p{L}\\p{N}])', 'giu'); }
+  catch (e) { savedRe = null; }
 }
-function pageWords() {
-  const sec = R.secs[R.s]; const n = R.pages;
-  if (n === 1) return sec.w;
-  const fill = lastFill(); const per = sec.w / (n - 1 + fill);
-  return R.page < n - 1 ? per : per * fill;
-}
-let panelOpen = false;
-function scheduleTurn() {
-  clearTimeout(R.timer); resetBar();
-  if (!R.auto || !isPages() || panelOpen || document.hidden || $('#reader').hidden) return;
-  const ms = clamp(pageWords() / S.wpm * 60000, 2000, 180000);
-  startBar(ms);
-  R.timer = setTimeout(() => { if (!turn(1)) { stopAuto(); toast('End of the book'); } }, ms);
-}
-function scrollLoop(ts) {
-  if (!R.auto || isPages()) { R.raf = 0; return; }
-  if (R.lastTs && !panelOpen && !document.hidden && ts > R.holdUntil) {
-    const dt = Math.min(100, ts - R.lastTs) / 1000;
-    const sec = R.secs[R.s];
-    const pxPerWord = textEl.scrollHeight / Math.max(1, sec.w);
-    if (Math.abs(window.scrollY - R.y) > 3) R.y = window.scrollY;
-    R.y += (S.wpm / 60) * pxPerWord * dt;
-    window.scrollTo(0, R.y);
-    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
-      if (turn(1)) R.y = 0; else { stopAuto(); toast('End of the book'); return; }
-    }
+function paintSaved() {
+  if (!HL) return;
+  const ranges = [];
+  if (savedRe && !$('#reader').hidden) {
+    textEl.querySelectorAll('p,h2').forEach(el => {
+      const n = el.firstChild; if (!n || n.nodeType !== 3) return;
+      const s = n.data; savedRe.lastIndex = 0; let m;
+      while ((m = savedRe.exec(s))) {
+        if (!m[0]) { savedRe.lastIndex++; continue; }
+        ranges.push(rangeIn(n, m.index, m.index + m[0].length));
+      }
+    });
   }
-  R.lastTs = ts;
-  R.raf = requestAnimationFrame(scrollLoop);
+  hlSet('saved', ranges, 0);
 }
+
+/* ---------- listen (read aloud with the phone's own voices) ---------- */
+let panelOpen = false;
+const synth = window.speechSynthesis || null;
+const T = { units: [], i: 0, playing: false, token: 0, queued: 0, afterPanel: false, pausedAt: null, voices: [] };
+const wantsListen = () => T.playing || T.afterPanel;
 let wl = null;
 async function wake(on) {
   try {
@@ -981,22 +1056,195 @@ async function wake(on) {
     else if (!on && wl) { await wl.release(); wl = null; }
   } catch (e) { /* not granted */ }
 }
-function setAutoUI() {
-  const b = $('#autoBtn');
-  b.setAttribute('aria-pressed', R.auto ? 'true' : 'false');
-  b.innerHTML = (R.auto ? IC.pause : IC.play) + '<span>' + (R.auto ? 'Pause' : 'Auto') + '</span>';
+function splitSentences(s) {
+  const raw = []; const re = /[^.!?…]+(?:[.!?…]+["”’')\]]*(?:\s+|$)|$)/g; let m;
+  while ((m = re.exec(s))) { if (!m[0]) { re.lastIndex++; continue; } raw.push({ a: m.index, b: m.index + m[0].length }); }
+  const out = [];
+  for (const x of raw) {
+    const prev = out[out.length - 1];
+    if (prev && (/(?:\b(?:Mr|Mrs|Ms|Dr|St|Prof|Sr|Jr|vs|etc|Mt|No|Fig)|\b[A-Z])\.["”’')\]]*\s*$/.test(s.slice(prev.a, prev.b)) || /^\s*[a-z]/.test(s.slice(x.a, x.b)))) prev.b = x.b;
+    else out.push({ a: x.a, b: x.b });
+  }
+  return out;
 }
-function startAuto() {
-  R.auto = true; setAutoUI(); wake(true);
-  if (isPages()) scheduleTurn(); else { R.y = window.scrollY; R.lastTs = 0; R.raf = requestAnimationFrame(scrollLoop); }
+function trimSpan(s, x) {
+  let a = x.a, b = x.b;
+  while (a < b && /\s/.test(s[a])) a++;
+  while (b > a && /\s/.test(s[b - 1])) b--;
+  return { a, b };
 }
-function stopAuto() {
-  R.auto = false; clearTimeout(R.timer); resetBar(); cancelAnimationFrame(R.raf); R.raf = 0; wake(false); setAutoUI();
+function buildUnits() {
+  T.units = [];
+  textEl.querySelectorAll('p,h2').forEach(el => {
+    const n = el.firstChild; if (!n || n.nodeType !== 3) return;
+    const s = n.data;
+    splitSentences(s).forEach(x0 => {
+      let x = trimSpan(s, x0);
+      while (x.b - x.a > 280) {
+        const seg = s.slice(x.a, x.a + 260); let cut = -1;
+        const mm = [...seg.matchAll(/[,;:—–]\s/g)].filter(q => q.index > 100);
+        if (mm.length) cut = mm[mm.length - 1].index + 1; else cut = seg.lastIndexOf(' ');
+        if (cut < 40) cut = 260;
+        T.units.push({ node: n, a: x.a, b: x.a + cut });
+        x = trimSpan(s, { a: x.a + cut, b: x.b });
+      }
+      if (x.b > x.a) T.units.push({ node: n, a: x.a, b: x.b });
+    });
+  });
+  T.units = T.units.filter(u => /[\p{L}\p{N}]/u.test(u.node.data.slice(u.a, u.b)));
+  T.units.forEach(u => { u.text = u.node.data.slice(u.a, u.b); });
 }
-function setWpm(v) {
-  S.wpm = clamp(Math.round(v / 5) * 5, 80, 300); saveS();
-  $('#wpmLbl').textContent = S.wpm + ' wpm'; $('#wpm').value = S.wpm; $('#wpmVal').textContent = S.wpm + ' wpm';
-  if (R.auto && isPages()) scheduleTurn();
+function startRect(u) { const rs = rangeIn(u.node, u.a, Math.min(u.b, u.a + 1)).getClientRects(); return rs[0] || null; }
+function rectVisible(q) {
+  const vr = vp.getBoundingClientRect();
+  const top = isPages() ? vr.top : rtop.getBoundingClientRect().bottom;
+  const bot = isPages() ? vr.bottom : $('#rbot').getBoundingClientRect().top;
+  return q.left >= vr.left - 1 && q.left < vr.right - 4 && q.top >= top - 2 && q.bottom <= bot + 2;
+}
+function unitVisible(u) { const q = startRect(u); return !!q && rectVisible(q); }
+function firstVisibleUnit() {
+  for (let i = 0; i < T.units.length; i++) if (unitVisible(T.units[i])) return i;
+  return 0;
+}
+function pageOfRect(q) { const vr = vp.getBoundingClientRect(); return Math.floor((q.left - vr.left + vp.scrollLeft + 2) / R.W); }
+function followUnit(i, force) {
+  const u = T.units[i]; if (!u || !R.W && isPages()) return;
+  if (!force && performance.now() < R.holdUntil) return;
+  const q = startRect(u); if (!q) return;
+  if (isPages()) {
+    const pg = clamp(pageOfRect(q), 0, R.pages - 1);
+    if (pg !== R.page) { pageTo(pg); afterMove(false); }
+  } else {
+    const top = rtop.getBoundingClientRect().bottom, bot = $('#rbot').getBoundingClientRect().top;
+    if (q.top < top + 8 || q.bottom > bot - 40) window.scrollTo({ top: Math.max(0, window.scrollY + q.top - top - 60), behavior: 'smooth' });
+  }
+}
+function followWord(r) {
+  if (!isPages() || performance.now() < R.holdUntil) return;
+  const q = r.getClientRects()[0]; if (!q) return;
+  const pg = clamp(pageOfRect(q), 0, R.pages - 1);
+  if (pg !== R.page) { pageTo(pg); afterMove(false); }
+}
+function rankVoice(v) {
+  const n = (v.name || '').toLowerCase(); let s = 0;
+  if (/premium/.test(n)) s += 30;
+  if (/enhanced/.test(n)) s += 20;
+  if (/siri/.test(n)) s += 15;
+  if (/^en[-_]us/i.test(v.lang)) s += 5;
+  if (v.localService) s += 1;
+  if (/\b(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy)\b/.test(n)) s -= 100;
+  return s;
+}
+function loadVoices() {
+  if (!synth) return;
+  T.voices = (synth.getVoices() || []).filter(v => /^en/i.test(v.lang)).sort((x, y) => rankVoice(y) - rankVoice(x));
+  const sel = $('#voiceSel'); if (!sel) return;
+  sel.replaceChildren(h('option', { value: '', text: 'Automatic (best available)' }));
+  T.voices.forEach(v => sel.append(h('option', { value: v.voiceURI, text: v.name + ' (' + v.lang + ')' })));
+  sel.value = S.voice && T.voices.some(v => v.voiceURI === S.voice) ? S.voice : '';
+}
+function pickVoice() {
+  if (!T.voices.length) loadVoices();
+  return (S.voice && T.voices.find(v => v.voiceURI === S.voice)) || T.voices[0] || null;
+}
+function makeUtt(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  const v = pickVoice();
+  if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
+  u.rate = S.rate;
+  return u;
+}
+function utter(i, token) {
+  const u = T.units[i]; const ut = makeUtt(u.text);
+  ut.onstart = () => {
+    if (token !== T.token) return;
+    T.i = i; hlSet('say', [rangeIn(u.node, u.a, u.b)], 1); hlSet('sayword', [], 2); followUnit(i);
+  };
+  ut.onboundary = e => {
+    if (token !== T.token || (e.name && e.name !== 'word')) return;
+    const s = u.node.data; const a = u.a + (e.charIndex || 0); if (a >= u.b) return;
+    let len = e.charLength;
+    if (!len) { const m = s.slice(a, u.b).match(/^[\p{L}\p{N}'’\-]+/u); len = m ? m[0].length : 1; }
+    const r = rangeIn(u.node, a, Math.min(u.b, a + len));
+    hlSet('sayword', [r], 2); followWord(r);
+  };
+  ut.onend = () => {
+    if (token !== T.token) return;
+    hlSet('sayword', [], 2);
+    if (i + 1 >= T.units.length) sectionDone();
+    else { T.i = i + 1; fillQueue(token); }
+  };
+  ut.onerror = e => {
+    if (token !== T.token) return;
+    if (e && (e.error === 'interrupted' || e.error === 'canceled')) return;
+    stopListen();
+    toast(e && e.error === 'not-allowed' ? 'Press Listen again to start the voice.' : 'The voice stopped. Press Listen to continue.', 4000);
+  };
+  return ut;
+}
+function fillQueue(token) {
+  if (token !== T.token || !synth) return;
+  while (T.queued < Math.min(T.units.length, T.i + 3)) synth.speak(utter(T.queued++, token));
+}
+function startListen(i) {
+  if (!synth) { toast('This browser cannot read aloud.'); return; }
+  if (!T.units.length) buildUnits();
+  if (!T.units.length) { toast('Nothing to read here.'); return; }
+  T.afterPanel = false;
+  halt();
+  const tk = T.token;
+  T.playing = true; T.i = clamp(i | 0, 0, T.units.length - 1); T.queued = T.i;
+  setListenUI(); wake(true);
+  const go = () => { if (tk === T.token && T.playing) fillQueue(tk); };
+  if (synth.speaking || synth.pending) setTimeout(go, 90); else go();
+}
+function halt() {
+  T.token++;
+  try { if (synth) synth.cancel(); } catch (e) { /* ignore */ }
+  hlSet('sayword', [], 2);
+}
+function stopListen() {
+  if (T.playing) T.pausedAt = { s: R.s, i: T.i };
+  T.playing = false; halt(); wake(false); setListenUI();
+}
+function sectionDone() {
+  if (R.s < R.secs.length - 1) { loadSection(R.s + 1); return; }
+  stopListen(); T.pausedAt = null; hlSet('say', [], 1); toast('End of the book');
+}
+function toggleListen() {
+  if (T.playing) { stopListen(); return; }
+  const pa = T.pausedAt; let i;
+  if (pa && pa.s === R.s && T.units[pa.i] && unitVisible(T.units[pa.i])) i = pa.i; else i = firstVisibleUnit();
+  startListen(i);
+}
+function setListenUI() {
+  const b = $('#listenBtn'); if (!b) return;
+  b.setAttribute('aria-pressed', T.playing ? 'true' : 'false');
+  b.innerHTML = (T.playing ? IC.pause : IC.play) + '<span>' + (T.playing ? 'Pause' : 'Listen') + '</span>';
+}
+const fmtRate = v => (Math.round(v * 100) / 100) + '×';
+let rateT = 0;
+function setRate(v) {
+  S.rate = clamp(Math.round(v * 20) / 20, 0.6, 1.6); saveS();
+  $('#rateLbl').textContent = fmtRate(S.rate); $('#rate').value = S.rate; $('#rateVal').textContent = fmtRate(S.rate);
+  if (T.playing) { clearTimeout(rateT); rateT = setTimeout(() => { if (T.playing) startListen(T.i); }, 450); }
+}
+function testVoice() {
+  if (!synth) { toast('This browser cannot read aloud.'); return; }
+  if (T.playing) stopListen();
+  halt();
+  setTimeout(() => synth.speak(makeUtt('This is how your book will sound. The quick brown fox jumps over the lazy dog.')), 90);
+}
+function unitIndexFor(node, off) {
+  let k = T.units.findIndex(u => u.node === node && off >= u.a && off < u.b);
+  if (k < 0) k = T.units.findIndex(u => u.node === node && u.a >= off);
+  return k;
+}
+function listenFromPanel() {
+  const r = P.range; if (!r) return;
+  const k = unitIndexFor(r.startContainer, r.startOffset);
+  closePanel(true);
+  startListen(k < 0 ? firstVisibleUnit() : k);
 }
 
 /* ---------- settings ---------- */
@@ -1009,19 +1257,22 @@ function applySettings() {
   $('#fsVal').textContent = S.fs;
   document.querySelectorAll('#fontSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.font)));
   document.querySelectorAll('#modeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.mode)));
-  $('#wpm').value = S.wpm; $('#wpmVal').textContent = S.wpm + ' wpm'; $('#wpmLbl').textContent = S.wpm + ' wpm';
+  $('#rate').value = S.rate; $('#rateVal').textContent = fmtRate(S.rate); $('#rateLbl').textContent = fmtRate(S.rate);
   $('#prevBtn').setAttribute('aria-label', isPages() ? 'Previous page' : 'Previous part');
   $('#nextBtn').setAttribute('aria-label', isPages() ? 'Next page' : 'Next part');
 }
 function changeSetting(fn) {
-  const wasAuto = R.auto, p = R.book ? curPara() : 0;
-  if (wasAuto) stopAuto();
+  const p = R.book ? curPara() : 0;
   fn(); saveS(); applySettings();
-  if (R.book) requestAnimationFrame(() => { syncNextBtn(); layoutPages(); measure(); paraTo(p); afterMove(false); if (wasAuto) startAuto(); });
+  if (R.book) requestAnimationFrame(() => {
+    syncNextBtn(); layoutPages(); measure();
+    if (T.playing && T.units[T.i]) followUnit(T.i, true); else paraTo(p);
+    afterMove(false);
+  });
 }
 
 /* ---------- lookup panel ---------- */
-const P = { seq: 0, ctl: null, cur: null, free: false };
+const P = { seq: 0, ctl: null, cur: null, free: false, range: null, sel: null };
 /* Free translation (no key): used when the page is not running inside Claude. */
 async function fetchJson(url, ms) {
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms || 9000);
@@ -1053,6 +1304,7 @@ async function freeTranslate(text) {
 const panel = $('#panel');
 let hitMark = null;
 function clearHit() {
+  if (HL) { hlSet('hit', [], 3); return; }
   if (hitMark && hitMark.parentNode) {
     const p = hitMark.parentNode;
     while (hitMark.firstChild) p.insertBefore(hitMark.firstChild, hitMark);
@@ -1062,6 +1314,7 @@ function clearHit() {
 }
 function setHit(range) {
   clearHit();
+  if (HL) { hlSet('hit', [range], 3); return; }
   try { const m = document.createElement('mark'); m.className = 'hit'; range.surroundContents(m); hitMark = m; } catch (e) { hitMark = null; }
 }
 function closePanel(quiet) {
@@ -1071,7 +1324,7 @@ function closePanel(quiet) {
   if (panelOpen) {
     panelOpen = false;
     try { const sel = window.getSelection(); if (sel) sel.removeAllRanges(); } catch (e) { /* ignore */ }
-    if (!quiet && R.auto && isPages()) scheduleTurn();
+    if (!quiet && T.afterPanel) { T.afterPanel = false; startListen(T.i); }
   }
 }
 function contextFor(range) {
@@ -1177,14 +1430,46 @@ function lookup(text, range, isTap) {
   const rect = range.getBoundingClientRect();
   const { ctx, para } = contextFor(range);
   if (P.ctl) { P.ctl.abort(); P.ctl = null; }
+  if (T.playing) { stopListen(); T.afterPanel = true; }
+  P.range = range.cloneRange(); $('#selPill').hidden = true;
   if (isTap) setHit(range); else clearHit();
-  panelOpen = true; clearTimeout(R.timer); resetBar();
+  panelOpen = true;
   P.cur = { text, ctx, para, ru: '', alts: [], lemma: '', pos: '', note: '' };
   $('#settings').hidden = true; $('#toc').hidden = true;
   panel.className = 'sheet ' + (rect.top > window.innerHeight * 0.5 ? 'top' : 'bottom');
   panel.hidden = false;
   $('#pSrc').textContent = text;
   runLookup();
+}
+function extendPhrase(dir) {
+  const r = P.range;
+  if (!r || r.startContainer !== r.endContainer || r.startContainer.nodeType !== 3) { toast('Select inside one paragraph to add words.'); return; }
+  const node = r.startContainer, s = node.data; let a = r.startOffset, b = r.endOffset;
+  const isW = ch => !!ch && /[\p{L}\p{N}'’\-]/u.test(ch);
+  if (dir > 0) {
+    let i = b; while (i < s.length && !isW(s[i])) i++;
+    if (i >= s.length) { toast('That is the end of the paragraph.'); return; }
+    let j = i; while (j < s.length && isW(s[j])) j++;
+    while (j > i && /['’\-]/.test(s[j - 1])) j--;
+    b = j;
+  } else {
+    let i = a; while (i > 0 && !isW(s[i - 1])) i--;
+    if (i <= 0) { toast('That is the start of the paragraph.'); return; }
+    let j = i; while (j > 0 && isW(s[j - 1])) j--;
+    while (j < i && /['’\-]/.test(s[j])) j++;
+    a = j;
+  }
+  if (b - a > 500) { toast('That is long enough. Try Whole sentence.'); return; }
+  lookup(s.slice(a, b), rangeIn(node, a, b), true);
+}
+function wholeSentence() {
+  const r = P.range;
+  if (!r || r.startContainer.nodeType !== 3) { toast('Select inside one paragraph first.'); return; }
+  const node = r.startContainer, s = node.data;
+  const list = splitSentences(s); if (!list.length) return;
+  const x0 = list.find(q => r.startOffset >= q.a && r.startOffset < q.b) || list[list.length - 1];
+  const x = trimSpan(s, x0);
+  if (x.b > x.a) lookup(s.slice(x.a, x.b), rangeIn(node, x.a, x.b), true);
 }
 function updateSaveBtn() {
   const o = P.cur; if (!o || !R.book) return;
@@ -1233,7 +1518,7 @@ vp.addEventListener('touchend', e => {
   const sel = window.getSelection();
   if (sel && !sel.isCollapsed) return;
   const t = e.changedTouches[0]; const dx = t.clientX - tx, dy = t.clientY - ty;
-  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5 && Date.now() - tt < 700) { swiped = true; turn(dx < 0 ? 1 : -1); }
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5 && Date.now() - tt < 450) { swiped = true; turn(dx < 0 ? 1 : -1); }
 }, { passive: true });
 vp.addEventListener('click', e => {
   if (e.target.closest && e.target.closest('button')) return;
@@ -1251,17 +1536,19 @@ let selT = 0;
 document.addEventListener('selectionchange', () => {
   clearTimeout(selT);
   selT = setTimeout(() => {
-    if ($('#reader').hidden) return;
+    const pill = $('#selPill');
     const sel = window.getSelection();
-    if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+    if ($('#reader').hidden || !sel || sel.isCollapsed || !sel.rangeCount) { pill.hidden = true; return; }
     const r = sel.getRangeAt(0);
-    if (!textEl.contains(r.commonAncestorContainer)) return;
+    if (!textEl.contains(r.commonAncestorContainer)) { pill.hidden = true; return; }
     const txt = sel.toString().replace(/\s+/g, ' ').trim();
-    if (!txt) return;
-    if (txt.length > 500) { toast('Select a shorter piece, up to about 500 characters.'); return; }
-    if (panelOpen && P.cur && P.cur.text === txt) return;
-    lookup(txt, r.cloneRange(), false);
-  }, 700);
+    if (!txt) { pill.hidden = true; return; }
+    if (txt.length > 500) { pill.hidden = true; toast('Select a shorter piece, up to about 500 characters.'); return; }
+    P.sel = r.cloneRange();
+    const n = txt.split(' ').length;
+    pill.textContent = n > 1 ? 'Translate ' + n + ' words' : 'Translate word';
+    pill.hidden = false;
+  }, 300);
 });
 
 /* ---------- saved words screen ---------- */
@@ -1300,12 +1587,214 @@ async function copyAll() {
   }
 }
 
+/* ---------- review (spaced repetition) ---------- */
+const DAY = 86400000;
+const RV = { active: false, practice: false, queue: [], done: 0, total: 0, right: 0, wrong: 0, failed: new Set(), cur: null };
+const isDue = w => (w.due || 0) <= Date.now();
+const dueList = () => Words.list.filter(isDue).sort((a, b) => (a.due || 0) - (b.due || 0) || (a.at || 0) - (b.at || 0));
+const wc = s => (s || '').trim().split(/\s+/).filter(Boolean).length;
+const norm = s => (s || '').toLowerCase().replace(/[’`]/g, "'").replace(/[^\p{L}\p{N}' ]/gu, '').replace(/\s+/g, ' ').trim();
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function schedule(w, g) {
+  let ivl = w.ivl || 0, ease = w.ease || 2.5, reps = w.reps || 0, lapses = w.lapses || 0;
+  if (g === 0) return { ivl: 0, ease: Math.max(1.3, ease - 0.2), reps: 0, lapses: lapses + 1, due: Date.now() + 10 * 60000 };
+  const base = Math.max(ivl, 1);
+  if (g === 1) { ivl = Math.max(1, Math.round(base * 1.2)); ease = Math.max(1.3, ease - 0.15); }
+  else if (g === 2) ivl = reps === 0 ? 1 : reps === 1 ? 3 : Math.round(base * ease);
+  else { ivl = reps === 0 ? 4 : Math.round(base * ease * 1.3); ease += 0.15; }
+  ivl = clamp(ivl, 1, 365);
+  return { ivl, ease, reps: reps + 1, lapses, due: Date.now() + ivl * DAY };
+}
+function fmtIvl(w, g) {
+  if (g === 0) return '10 min';
+  const d = schedule(w, g).ivl;
+  return d < 7 ? d + ' d' : d < 30 ? Math.round(d / 7) + ' wk' : Math.round(d / 30) + ' mo';
+}
+function fmtWhen(ms) {
+  const d = ms - Date.now();
+  if (d < 3600000) return 'in ' + Math.max(1, Math.round(d / 60000)) + ' min';
+  if (d < DAY) return 'in ' + Math.round(d / 3600000) + ' h';
+  return 'in ' + Math.round(d / DAY) + ' d';
+}
+function updateReviewTab() {
+  const n = Words.list.filter(isDue).length;
+  $('#tabReview').innerHTML = IC.cards + '<span>Review <span class="badge">' + (n || '') + '</span></span>';
+}
+function renderReviewHome() {
+  updateReviewTab();
+  if (RV.active) { $('#rvHome').hidden = true; $('#rvRun').hidden = false; return; }
+  $('#rvHome').hidden = false; $('#rvRun').hidden = true;
+  const total = Words.list.length, due = dueList().length;
+  const fresh = Words.list.filter(w => !w.last).length;
+  const tile = (n, l) => h('div', { class: 'rvtile' }, h('b', { text: String(n) }), h('span', { text: l }));
+  $('#rvStats').replaceChildren(tile(due, 'due now'), tile(fresh, 'new'), tile(total, 'saved'));
+  const later = Words.list.filter(w => !isDue(w)).map(w => w.due).sort((a, b) => a - b)[0];
+  $('#rvNext').textContent = !total ? 'Save some words while you read, then come back here.' : due ? 'Ready when you are. A session is up to 20 words.' : 'All caught up. Next review ' + fmtWhen(later) + '.';
+  $('#rvStart').disabled = !due; $('#rvStart').textContent = due ? 'Start review (' + Math.min(due, 20) + ')' : 'Nothing due';
+  $('#rvMore').disabled = !total;
+}
+function rvStart(practice) {
+  const ids = practice ? shuffle(Words.list).slice(0, 10).map(w => w.id) : dueList().slice(0, 20).map(w => w.id);
+  if (!ids.length) return;
+  Object.assign(RV, { active: true, practice, queue: ids, done: 0, total: ids.length, right: 0, wrong: 0, failed: new Set(), cur: null });
+  renderReviewHome(); rvShow();
+}
+function rvQuit() { RV.active = false; RV.cur = null; renderReviewHome(); }
+function blankCtx(w) {
+  const c = w.ctx || ''; if (!c || !w.text) return null;
+  const i = c.toLowerCase().indexOf(w.text.toLowerCase());
+  return i < 0 ? null : { before: c.slice(0, i), after: c.slice(i + w.text.length) };
+}
+function pickType(w) {
+  const others = Words.list.filter(x => x.id !== w.id);
+  const uniq = f => new Set(others.map(f).filter(Boolean)).size;
+  const canMC = new Set(others.map(x => (x.ru || '').toLowerCase()).filter(x => x && x !== (w.ru || '').toLowerCase())).size >= 3;
+  const cl = !!blankCtx(w) && wc(w.text) <= 4 && wc(w.ctx) <= 45;
+  const enOpts = new Set(others.map(x => (x.text || '').toLowerCase()).filter(x => x && x !== w.text.toLowerCase())).size >= 3;
+  const reps = w.reps || 0;
+  if (wc(w.text) > 4 || reps === 0 || !(w.ru)) return 'card';
+  const pool = [];
+  if (reps < 4) { if (canMC) pool.push('mc', 'mc'); if (cl && enOpts) pool.push('clozeMc'); }
+  else { if (cl) pool.push('clozeType', 'clozeType'); pool.push('typeRu'); if (cl && enOpts) pool.push('clozeMc'); if (canMC) pool.push('mc'); }
+  if (!pool.length) return 'card';
+  void uniq;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+function ctxNode(w, blank) {
+  const b = blankCtx(w);
+  if (!b) return w.ctx ? h('p', { class: 'rvctx', text: w.ctx }) : null;
+  return h('p', { class: 'rvctx' }, b.before, blank ? h('span', { class: 'rvblank', 'aria-label': 'blank' }, ' ') : h('b', { text: w.text }), b.after);
+}
+function speakBtn(text) {
+  if (!synth) return null;
+  return h('button', { class: 'btn', text: 'Listen', onclick: () => { try { halt(); synth.speak(makeUtt(text)); } catch (e) { /* ignore */ } } });
+}
+function ruNode(w) {
+  return h('div', {}, h('div', { class: 'rvans' + (wc(w.ru) > 3 ? ' long' : ''), lang: 'ru', text: w.ru || '' }),
+    (w.alts && w.alts.length) ? h('p', { class: 'pline', lang: 'ru', text: w.alts.join(' · ') }) : null,
+    w.note ? h('p', { class: 'pline pnote', lang: 'ru', text: w.note }) : null);
+}
+function rvShow() {
+  const box = $('#rvRun'); box.replaceChildren();
+  while (RV.queue.length && !Words.list.find(x => x.id === RV.queue[0])) RV.queue.shift();
+  if (!RV.queue.length) { rvFinish(); return; }
+  const w = Words.list.find(x => x.id === RV.queue[0]);
+  const type = pickType(w);
+  RV.cur = { w, type, hint: false };
+  const card = h('div', { class: 'rvcard', 'aria-live': 'polite' });
+  const prog = h('i'); prog.style.width = Math.round(RV.done / Math.max(1, RV.total) * 100) + '%';
+  box.append(
+    h('div', { class: 'rvtop' }, h('button', { class: 'btn', text: 'End', onclick: rvQuit }),
+      h('div', { class: 'rvprog' }, prog),
+      h('span', { class: 'rvcount', text: RV.done + ' / ' + RV.total })),
+    card);
+  const q = (txt) => h('div', { class: 'rvq' + (wc(txt) > 4 ? ' long' : ''), text: txt });
+  if (type === 'card') {
+    card.append(h('div', { class: 'rvlabel', text: RV.cur.w.reps ? 'Remember it?' : 'New word' }), q(w.text), speakBtn(w.text), ctxNode(w, false));
+    const show = h('button', { class: 'btn primary big', text: 'Show answer' });
+    card.append(show);
+    show.onclick = () => {
+      show.remove();
+      card.append(ruNode(w), (w.pos || w.lemma) ? h('p', { class: 'pline', text: [w.pos, w.lemma && w.lemma.toLowerCase() !== w.text.toLowerCase() ? 'base form: ' + w.lemma : ''].filter(Boolean).join(' · ') }) : null);
+      const row = h('div', { class: 'rvgrades' });
+      [['Again', 0], ['Hard', 1], ['Good', 2], ['Easy', 3]].forEach(([l, g]) => row.append(h('button', { class: 'btn rvg', onclick: () => rvGrade(g) }, h('b', { text: l }), h('small', { text: fmtIvl(w, g) }))));
+      card.append(row);
+    };
+  } else if (type === 'mc' || type === 'clozeMc') {
+    const cloze = type === 'clozeMc';
+    const others = Words.list.filter(x => x.id !== w.id);
+    const key = cloze ? 'text' : 'ru';
+    const same = x => (x[key] || '').toLowerCase() === (w[key] || '').toLowerCase();
+    let pool = shuffle(others.filter(x => x[key] && !same(x)));
+    if (cloze) pool = pool.sort((a, b) => Math.abs(wc(a.text) - wc(w.text)) - Math.abs(wc(b.text) - wc(w.text)));
+    const seen = new Set([(w[key] || '').toLowerCase()]); const opts = [w[key]];
+    for (const x of pool) { const k = x[key].toLowerCase(); if (!seen.has(k)) { seen.add(k); opts.push(x[key]); } if (opts.length >= 4) break; }
+    card.append(h('div', { class: 'rvlabel', text: cloze ? 'Fill in the blank' : 'Choose the Russian meaning' }));
+    if (cloze) card.append(ctxNode(w, true)); else card.append(q(w.text), speakBtn(w.text), ctxNode(w, false));
+    const list = h('div', { class: 'rvopts' });
+    shuffle(opts).forEach(o => {
+      const b = h('button', { class: 'rvopt', text: o, lang: cloze ? null : 'ru' });
+      b.onclick = () => {
+        const ok = o === w[key];
+        list.querySelectorAll('button').forEach(x => { x.disabled = true; if (x.textContent === w[key]) x.classList.add('ok'); });
+        if (!ok) b.classList.add('bad');
+        rvResult(card, ok, w, cloze);
+      };
+      list.append(b);
+    });
+    card.append(list);
+  } else {
+    const cloze = type === 'clozeType';
+    card.append(h('div', { class: 'rvlabel', text: cloze ? 'Type the missing word' : 'Type it in English' }));
+    if (cloze) card.append(ctxNode(w, true), h('p', { class: 'pline', lang: 'ru', text: w.ru || '' }));
+    else card.append(h('div', { class: 'rvans', lang: 'ru', text: w.ru || '' }));
+    const inp = h('input', { class: 'rvin', type: 'text', autocapitalize: 'off', autocorrect: 'off', autocomplete: 'off', spellcheck: 'false', 'aria-label': 'Your answer', placeholder: wc(w.text) > 1 ? wc(w.text) + ' words' : w.text.length + ' letters' });
+    const hint = h('p', { class: 'pline', hidden: true });
+    const check = h('button', { class: 'btn primary', text: 'Check' });
+    const hintBtn = h('button', { class: 'btn', text: 'Hint' });
+    const idk = h('button', { class: 'btn', text: 'I don’t know' });
+    const row = h('div', { class: 'rvrow' }, check, hintBtn, idk);
+    const finish = ok => { inp.disabled = true; row.remove(); hint.hidden = true; inp.classList.add(ok ? 'ok' : 'bad'); rvResult(card, ok, w, cloze); };
+    check.onclick = () => {
+      const a = norm(inp.value); if (!a) { inp.focus(); return; }
+      finish([w.text, w.lemma].filter(Boolean).map(norm).includes(a));
+    };
+    inp.onkeydown = e => { if (e.key === 'Enter') check.onclick(); };
+    hintBtn.onclick = () => { RV.cur.hint = true; hint.hidden = false; hint.textContent = 'Starts with “' + w.text.slice(0, 1) + '”, ' + w.text.length + ' characters.'; hintBtn.disabled = true; inp.focus(); };
+    idk.onclick = () => finish(false);
+    card.append(inp, hint, row);
+    if (!/iPhone|iPad/.test(navigator.userAgent)) inp.focus();
+  }
+}
+function rvResult(card, ok, w, cloze) {
+  const g = ok ? (RV.cur.hint ? 1 : 2) : 0;
+  card.append(h('div', { class: 'rvfb ' + (ok ? 'ok' : 'bad'), text: ok ? (RV.cur.hint ? 'Correct, with a hint' : 'Correct') : 'Not quite' }));
+  card.append(h('div', { class: 'rvq' + (wc(w.text) > 4 ? ' long' : ''), text: w.text }), ruNode(w));
+  if (cloze || w.ctx) { const c = ctxNode(w, false); if (c) card.append(c); }
+  const row = h('div', { class: 'rvrow' }, h('button', { class: 'btn primary', text: 'Next', onclick: () => rvGrade(g) }));
+  if (ok && !RV.cur.hint) row.append(h('button', { class: 'btn', text: 'That was easy', onclick: () => rvGrade(3) }));
+  const sp = speakBtn(w.text); if (sp) row.append(sp);
+  card.append(row);
+}
+function rvGrade(g) {
+  const { w } = RV.cur; if (!w) return;
+  if (!RV.practice) Words.patch(w.id, { ...schedule(w, g), last: Date.now() }).catch(() => toast('Could not save your progress.'));
+  RV.queue.shift();
+  if (g === 0) {
+    if (!RV.failed.has(w.id)) { RV.failed.add(w.id); RV.wrong++; }
+    RV.queue.splice(Math.min(2, RV.queue.length), 0, w.id);
+  } else {
+    if (!RV.failed.has(w.id)) RV.right++;
+    RV.done++;
+  }
+  updateReviewTab();
+  rvShow();
+  window.scrollTo(0, 0);
+}
+function rvFinish() {
+  const box = $('#rvRun'); box.replaceChildren();
+  const n = RV.right + RV.wrong; const pct = n ? Math.round(RV.right / n * 100) : 0;
+  const later = Words.list.filter(w => !isDue(w)).map(w => w.due).sort((a, b) => a - b)[0];
+  const moreDue = !RV.practice && dueList().length;
+  box.append(h('div', { class: 'rvcard' },
+    h('div', { class: 'rvq', text: 'Session complete' }),
+    h('p', { class: 'rvctx', text: n + ' word' + (n === 1 ? '' : 's') + ', ' + RV.right + ' right the first time (' + pct + '%).' + (later && !RV.practice ? ' Next review ' + fmtWhen(later) + '.' : '') }),
+    moreDue ? h('button', { class: 'btn primary big', text: 'Review ' + Math.min(moreDue, 20) + ' more', onclick: () => rvStart(false) }) : null,
+    h('button', { class: 'btn big', text: 'Done', onclick: rvQuit })));
+  RV.cur = null;
+}
+
 /* ---------- wiring ---------- */
 function init() {
   $('#backBtn').innerHTML = IC.left; $('#prevBtn').innerHTML = IC.left; $('#nextBtn').innerHTML = IC.right; $('#pClose').innerHTML = IC.close;
   $('#tabBooks').innerHTML = IC.book + '<span>Books</span>';
   $('#tabWords').innerHTML = IC.list + '<span>Words</span>';
-  setAutoUI(); applySettings();
+  updateReviewTab();
+  $('#tabReview').onclick = () => showScreen('review');
+  $('#rvStart').onclick = () => rvStart(false);
+  $('#rvMore').onclick = () => rvStart(true);
+  setListenUI(); applySettings();
+  if (synth) { loadVoices(); if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices); } else { $('#listenBtn').disabled = true; }
 
   $('#tabBooks').onclick = () => showScreen('library');
   $('#tabWords').onclick = () => showScreen('words');
@@ -1317,9 +1806,22 @@ function init() {
   $('#backBtn').onclick = closeBook;
   $('#prevBtn').onclick = () => { turn(-1); };
   $('#nextBtn').onclick = () => { turn(1); };
-  $('#autoBtn').onclick = () => { if (R.auto) stopAuto(); else startAuto(); };
-  $('#slower').onclick = () => setWpm(S.wpm - 10);
-  $('#faster').onclick = () => setWpm(S.wpm + 10);
+  $('#listenBtn').onclick = toggleListen;
+  $('#slower').onclick = () => setRate(S.rate - 0.1);
+  $('#faster').onclick = () => setRate(S.rate + 0.1);
+  $('#voiceSel').onchange = e => { S.voice = e.target.value; saveS(); if (T.playing) startListen(T.i); };
+  $('#voiceTest').onclick = testVoice;
+  $('#pListen').onclick = listenFromPanel;
+  $('#pPrev').onclick = () => extendPhrase(-1);
+  $('#pNext').onclick = () => extendPhrase(1);
+  $('#pWhole').onclick = wholeSentence;
+  $('#selPill').onclick = () => {
+    const r = P.sel; if (!r) return;
+    const txt = r.toString();
+    $('#selPill').hidden = true;
+    lookup(txt, r, true);
+    try { const sel = window.getSelection(); if (sel) sel.removeAllRanges(); } catch (e) { /* ignore */ }
+  };
   $('#setBtn').onclick = () => { closePanel(true); $('#toc').hidden = true; const s = $('#settings'); s.hidden = !s.hidden; };
   $('#tocBtn').innerHTML = IC.list; $('#tocClose').innerHTML = IC.close;
   $('#tocBtn').onclick = () => { if ($('#toc').hidden) openToc(); else $('#toc').hidden = true; };
@@ -1330,7 +1832,7 @@ function init() {
   $('#fsUp').onclick = () => changeSetting(() => { S.fs = clamp(S.fs + 1, 14, 28); });
   document.querySelectorAll('#fontSeg button').forEach(b => { b.onclick = () => changeSetting(() => { S.font = b.dataset.v; }); });
   document.querySelectorAll('#modeSeg button').forEach(b => { b.onclick = () => changeSetting(() => { S.mode = b.dataset.v; window.scrollTo(0, 0); }); });
-  $('#wpm').oninput = e => setWpm(Number(e.target.value));
+  $('#rate').oninput = e => setRate(Number(e.target.value));
   $('#pClose').onclick = () => closePanel();
   $('#pSave').onclick = toggleSave;
   $('#pRetry').onclick = runLookup;
@@ -1351,16 +1853,25 @@ function init() {
     else if (isPages() && e.key === 'ArrowLeft') turn(-1);
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { clearTimeout(R.timer); resetBar(); savePos(); }
-    else if (R.auto) { wake(true); if (isPages()) scheduleTurn(); }
+    if (document.hidden) { savePos(); }
+    else if (!$('#review').hidden && !RV.active) renderReviewHome();
+    if (!document.hidden && T.playing) { wake(true); if (synth && !synth.speaking && !synth.pending) startListen(T.i); else followUnit(T.i, true); }
   });
   window.addEventListener('pagehide', savePos);
-  window.addEventListener('scroll', () => { if (!isPages() && R.book && !$('#reader').hidden) afterMove(false); }, { passive: true });
+  let scT = 0;
+  window.addEventListener('scroll', () => {
+    if (isPages() || !R.book || $('#reader').hidden) return;
+    afterMove(false);
+    if (T.playing && performance.now() < R.holdUntil + 800) {
+      clearTimeout(scT);
+      scT = setTimeout(() => { const u = T.units[T.i]; if (T.playing && u && !unitVisible(u)) startListen(firstVisibleUnit()); }, 600);
+    }
+  }, { passive: true });
   if (window.ResizeObserver) {
     let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(relayout, 140); }).observe(vp);
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { setTimeout(relayout, 60); });
-  Words.on(() => { renderWords(); updateSaveBtn(); });
+  Words.on(() => { rebuildSaved(); paintSaved(); renderWords(); updateSaveBtn(); updateReviewTab(); if (!RV.active && !$('#review').hidden) renderReviewHome(); });
   renderWords();
 }
 async function boot() {
