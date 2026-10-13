@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="referrer" content="no-referrer">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Marginalia">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -309,7 +310,7 @@ select { width: 100%; min-height: 44px; border-radius: 10px; border: 1px solid v
     <div class="srow col"><label for="voiceSel">Reading voice</label><select id="voiceSel"></select></div>
     <div class="srow col"><label for="rate">Reading speed<b id="rateVal"></b></label><input type="range" id="rate" min="0.6" max="1.6" step="0.05"></div>
     <button class="btn" id="voiceTest">Play a sample</button>
-    <p class="hint" id="voiceHint">The voices come from your phone. For a more natural one, open Settings, Accessibility, Spoken Content, Voices, English, download an Enhanced or Premium voice, then reload this app. Apple does not always share its Siri voices with web apps. Highlighting while reading needs iOS 17.2 or newer.</p>
+    <p class="hint" id="voiceHint">iPhone Safari shares only its basic voices with web apps, not your downloaded Premium or Enhanced ones. “Google voice” sounds more natural but needs internet. It is an unofficial free service, so it may stop working, and it highlights whole sentences instead of single words. Highlighting needs iOS 17.2 or newer.</p>
     <button class="btn primary" id="setDone">Done</button>
   </div>
 </section>
@@ -1080,11 +1081,11 @@ function buildUnits() {
     const s = n.data;
     splitSentences(s).forEach(x0 => {
       let x = trimSpan(s, x0);
-      while (x.b - x.a > 280) {
-        const seg = s.slice(x.a, x.a + 260); let cut = -1;
-        const mm = [...seg.matchAll(/[,;:—–]\s/g)].filter(q => q.index > 100);
+      while (x.b - x.a > 190) {
+        const seg = s.slice(x.a, x.a + 180); let cut = -1;
+        const mm = [...seg.matchAll(/[,;:—–]\s/g)].filter(q => q.index > 70);
         if (mm.length) cut = mm[mm.length - 1].index + 1; else cut = seg.lastIndexOf(' ');
-        if (cut < 40) cut = 260;
+        if (cut < 40) cut = 180;
         T.units.push({ node: n, a: x.a, b: x.a + cut });
         x = trimSpan(s, { a: x.a + cut, b: x.b });
       }
@@ -1136,12 +1137,12 @@ function rankVoice(v) {
   return s;
 }
 function loadVoices() {
-  if (!synth) return;
+  if (!synth) { const s0 = $('#voiceSel'); if (s0) { s0.replaceChildren(h('option', { value: '', text: 'Automatic' }), h('option', { value: 'google', text: 'Google voice (online, free)' })); s0.value = S.voice === 'google' ? 'google' : ''; } return; }
   T.voices = (synth.getVoices() || []).filter(v => /^en/i.test(v.lang)).sort((x, y) => rankVoice(y) - rankVoice(x));
   const sel = $('#voiceSel'); if (!sel) return;
-  sel.replaceChildren(h('option', { value: '', text: 'Automatic (best available)' }));
+  sel.replaceChildren(h('option', { value: '', text: 'Automatic (best available)' }), h('option', { value: 'google', text: 'Google voice (online, free)' }));
   T.voices.forEach(v => sel.append(h('option', { value: v.voiceURI, text: v.name + ' (' + v.lang + ')' })));
-  sel.value = S.voice && T.voices.some(v => v.voiceURI === S.voice) ? S.voice : '';
+  sel.value = S.voice === 'google' || (S.voice && T.voices.some(v => v.voiceURI === S.voice)) ? S.voice : '';
 }
 function pickVoice() {
   if (!T.voices.length) loadVoices();
@@ -1153,6 +1154,31 @@ function makeUtt(text) {
   if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
   u.rate = S.rate;
   return u;
+}
+/* Google voice: unofficial free speech link played through an audio element (needs internet) */
+const GA = { el: null };
+const isCloud = () => S.voice === 'google';
+const gUrl = text => 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-US&q=' + encodeURIComponent(text);
+function gPrefetch(i) { const u = T.units[i]; if (!u) return; try { const a = new Audio(); a.preload = 'auto'; a.src = gUrl(u.text); } catch (e) { /* ignore */ } }
+function cloudPlay(i, tk) {
+  if (tk !== T.token) return;
+  const u = T.units[i]; if (!u) return;
+  if (!GA.el) GA.el = new Audio();
+  const a = GA.el;
+  T.i = i; hlSet('say', [rangeIn(u.node, u.a, u.b)], 1); hlSet('sayword', [], 2); followUnit(i);
+  a.onended = () => { if (tk !== T.token) return; if (i + 1 >= T.units.length) sectionDone(); else cloudPlay(i + 1, tk); };
+  a.onerror = () => { if (tk !== T.token) return; stopListen(); toast('The Google voice could not be reached. Check your internet or pick another voice in Aa settings.', 6000); };
+  a.src = gUrl(u.text); a.playbackRate = S.rate;
+  const pr = a.play();
+  if (pr && pr.catch) pr.catch(() => { if (tk === T.token) { stopListen(); toast('Press Listen again to start the voice.', 4000); } });
+  gPrefetch(i + 1); gPrefetch(i + 2);
+}
+function speakOnce(text) {
+  try {
+    halt();
+    if (isCloud()) { if (!GA.el) GA.el = new Audio(); GA.el.onended = null; GA.el.onerror = () => toast('The Google voice could not be reached.', 4000); GA.el.src = gUrl(text); GA.el.playbackRate = S.rate; const pr = GA.el.play(); if (pr && pr.catch) pr.catch(() => {}); }
+    else if (synth) synth.speak(makeUtt(text));
+  } catch (e) { /* ignore */ }
 }
 function utter(i, token) {
   const u = T.units[i]; const ut = makeUtt(u.text);
@@ -1187,7 +1213,7 @@ function fillQueue(token) {
   while (T.queued < Math.min(T.units.length, T.i + 3)) synth.speak(utter(T.queued++, token));
 }
 function startListen(i) {
-  if (!synth) { toast('This browser cannot read aloud.'); return; }
+  if (!synth && !isCloud()) { toast('This browser cannot read aloud.'); return; }
   if (!T.units.length) buildUnits();
   if (!T.units.length) { toast('Nothing to read here.'); return; }
   T.afterPanel = false;
@@ -1195,12 +1221,14 @@ function startListen(i) {
   const tk = T.token;
   T.playing = true; T.i = clamp(i | 0, 0, T.units.length - 1); T.queued = T.i;
   setListenUI(); wake(true);
+  if (isCloud()) { cloudPlay(T.i, tk); return; }
   const go = () => { if (tk === T.token && T.playing) fillQueue(tk); };
   if (synth.speaking || synth.pending) setTimeout(go, 90); else go();
 }
 function halt() {
   T.token++;
   try { if (synth) synth.cancel(); } catch (e) { /* ignore */ }
+  try { if (GA.el) GA.el.pause(); } catch (e) { /* ignore */ }
   hlSet('sayword', [], 2);
 }
 function stopListen() {
@@ -1230,10 +1258,12 @@ function setRate(v) {
   if (T.playing) { clearTimeout(rateT); rateT = setTimeout(() => { if (T.playing) startListen(T.i); }, 450); }
 }
 function testVoice() {
-  if (!synth) { toast('This browser cannot read aloud.'); return; }
   if (T.playing) stopListen();
+  const sample = 'This is how your book will sound. The quick brown fox jumps over the lazy dog.';
+  if (isCloud()) { speakOnce(sample); return; }
+  if (!synth) { toast('This browser cannot read aloud.'); return; }
   halt();
-  setTimeout(() => synth.speak(makeUtt('This is how your book will sound. The quick brown fox jumps over the lazy dog.')), 90);
+  setTimeout(() => synth.speak(makeUtt(sample)), 90);
 }
 function unitIndexFor(node, off) {
   let k = T.units.findIndex(u => u.node === node && off >= u.a && off < u.b);
@@ -1666,8 +1696,8 @@ function ctxNode(w, blank) {
   return h('p', { class: 'rvctx' }, b.before, blank ? h('span', { class: 'rvblank', 'aria-label': 'blank' }, ' ') : h('b', { text: w.text }), b.after);
 }
 function speakBtn(text) {
-  if (!synth) return null;
-  return h('button', { class: 'btn', text: 'Listen', onclick: () => { try { halt(); synth.speak(makeUtt(text)); } catch (e) { /* ignore */ } } });
+  if (!synth && !isCloud()) return null;
+  return h('button', { class: 'btn', text: 'Listen', onclick: () => speakOnce(text) });
 }
 function ruNode(w) {
   return h('div', {}, h('div', { class: 'rvans' + (wc(w.ru) > 3 ? ' long' : ''), lang: 'ru', text: w.ru || '' }),
@@ -1794,7 +1824,7 @@ function init() {
   $('#rvStart').onclick = () => rvStart(false);
   $('#rvMore').onclick = () => rvStart(true);
   setListenUI(); applySettings();
-  if (synth) { loadVoices(); if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices); } else { $('#listenBtn').disabled = true; }
+  if (synth) { loadVoices(); if (synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices); } else { loadVoices(); }
 
   $('#tabBooks').onclick = () => showScreen('library');
   $('#tabWords').onclick = () => showScreen('words');
@@ -1855,7 +1885,7 @@ function init() {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { savePos(); }
     else if (!$('#review').hidden && !RV.active) renderReviewHome();
-    if (!document.hidden && T.playing) { wake(true); if (synth && !synth.speaking && !synth.pending) startListen(T.i); else followUnit(T.i, true); }
+    if (!document.hidden && T.playing) { wake(true); const idle = isCloud() ? !GA.el || GA.el.paused : (synth && !synth.speaking && !synth.pending); if (idle) startListen(T.i); else followUnit(T.i, true); }
   });
   window.addEventListener('pagehide', savePos);
   let scT = 0;
